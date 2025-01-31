@@ -1,3 +1,4 @@
+// all the handlers for the api are defined here
 package main
 
 import (
