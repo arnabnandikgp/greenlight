@@ -16,8 +16,7 @@ func (app *application) createMoviesHandler(w http.ResponseWriter, r *http.Reque
 func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
-		http.NotFound(w, r)
-		return
+		app.notFoundResponse(w, r)
 	}
 
 	movie := data.Movie{
@@ -29,9 +28,8 @@ func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request)
 		Version:   1,
 	}
 
-  err = app.writeJSON(w, http.StatusOK, envelope{"movie":movie}, nil)
+	err = app.writeJSON(w, http.StatusOK, envelope{"movie": movie}, nil)
 	if err != nil {
-		app.logger.Println(err)
-		http.Error(w, "the server went into some problem with your req", http.StatusInternalServerError)
+		app.serverErrorResponse(w, r, err)
 	}
 }
