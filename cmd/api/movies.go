@@ -1,4 +1,3 @@
-// all the handlers for the api are defined here
 package main
 
 import (
@@ -10,13 +9,25 @@ import (
 )
 
 func (app *application) createMoviesHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "create a movie")
+	var input struct {
+		Title   string   `json:"title"`
+		Year    int32    `json:"year"`
+		Runtime int32    `json:"runtime"`
+		Genres  []string `json:"genres"`
+	}
+	err := app.readJSON(w, r, &input)
+	if err != nil {
+		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+		return
+	}
+	fmt.Fprintf(w, "%+v\n", input)
 }
 
 func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
-		app.notFoundResponse(w, r)
+		app.badRequestResponse(w, r, err)
+		return
 	}
 
 	movie := data.Movie{
