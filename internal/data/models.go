@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-var ErrRecorNotFound = errors.New("record not found for real")
+var ErrRecordNotFound = errors.New("record not found for real")
 
 type Models struct {
 	Movies MovieModel
